@@ -8,7 +8,7 @@
 
 ## Automated checks added
 
-- `tests/test_progression.gd`: fuse requirement, invalid/valid locker code, key, and ending state.
+- `tests/test_progression.gd`: doorway reachability for the fuse and locker, fuse requirement, invalid/valid locker code, live objective/inventory HUD, and ending state.
 - `tests/test_pause.gd`: pause, resume, and game-over state.
 - `tests/test_settings.gd`: settings save/load round trip.
 - `tests/test_enemy_perception.gd`: noise range, investigate target, navigation path, forward vision, and wall occlusion.

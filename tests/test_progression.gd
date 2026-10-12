@@ -7,12 +7,20 @@ func _run() -> void:
 	var game = load("res://scenes/main/main.tscn").instantiate()
 	root.add_child(game)
 	await process_frame
+	await physics_frame
 	assert(game.objective_label.text.contains("Find the fuse"), "The starting objective must be visible")
 	var fuse = game.find_child("Fuse", true, false)
 	var panel = game.find_child("ElectricalPanel", true, false)
 	var locker = game.find_child("Locker14", true, false)
 	var door = game.find_child("ExitDoor", true, false)
 	assert(fuse != null and panel != null and locker != null and door != null, "Progression props must exist")
+	var space: PhysicsDirectSpaceState3D = game.get_world_3d().direct_space_state
+	var fuse_query := PhysicsRayQueryParameters3D.create(Vector3(0, 1.0, -13), Vector3(-8.1, 1.0, -13))
+	var fuse_hit: Dictionary = space.intersect_ray(fuse_query)
+	assert(fuse_hit.get("collider") == fuse, "The fuse must be reachable through the classroom doorway")
+	var locker_query := PhysicsRayQueryParameters3D.create(Vector3(0, 1.2, -3), Vector3(8.8, 1.2, -3))
+	var locker_hit: Dictionary = space.intersect_ray(locker_query)
+	assert(locker_hit.get("collider") == locker, "The locker must be reachable through the teachers' room doorway")
 	locker.interact(game.player, game)
 	assert(not game.has_key, "Exit key must remain unavailable before power is restored")
 	fuse.interact(game.player, game)
