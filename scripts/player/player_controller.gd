@@ -13,6 +13,7 @@ var ray: RayCast3D
 var flashlight: SpotLight3D
 var crouching := false
 var world: Node
+var footstep_timer := 0.0
 
 func _ready() -> void:
 	world = get_parent()
@@ -69,6 +70,14 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = 0.0
 	move_and_slide()
+	if direction.length() > 0.1:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			var noise_radius := 2.0 if crouching else (13.0 if speed == sprint_speed else 5.0)
+			NoiseManager.report_noise(global_position, noise_radius, self)
+			footstep_timer = 0.7 if crouching else (0.42 if speed == sprint_speed else 0.58)
+	else:
+		footstep_timer = 0.0
 
 func _interact() -> void:
 	ray.force_raycast_update()

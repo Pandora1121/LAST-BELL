@@ -1,5 +1,5 @@
 extends CharacterBody3D
-## Simple deterministic hallway FSM. Walls block visual detection; the monster never teleports to the player.
+## Deterministic hallway FSM. Sight rays and emitted noise provide its only player cues.
 
 enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK, RETURN_TO_PATROL }
 
@@ -7,7 +7,7 @@ enum State { PATROL, INVESTIGATE, CHASE, SEARCH, ATTACK, RETURN_TO_PATROL }
 @export var chase_speed := 2.7
 @export var detection_range := 11.0
 @export_range(20.0, 160.0) var field_of_view_degrees := 90.0
-@export var hearing_range := 8.0
+@export var hearing_range := 12.0
 @export var attack_distance := 1.25
 @export var search_duration := 4.0
 @export var gravity := 18.0
@@ -21,11 +21,21 @@ var player: CharacterBody3D
 var sight_ray: RayCast3D
 var body_mesh: MeshInstance3D
 var game: Node
+var navigation_agent: NavigationAgent3D
+var _last_navigation_target := Vector3(INF, INF, INF)
 
 func _ready() -> void:
 	game = get_parent()
 	player = game.player
 	_build_body()
+	navigation_agent = NavigationAgent3D.new()
+	navigation_agent.name = "NavigationAgent3D"
+	navigation_agent.path_desired_distance = 0.45
+	navigation_agent.target_desired_distance = 0.7
+	navigation_agent.avoidance_enabled = false
+	add_child(navigation_agent)
+	NoiseManager.noise_emitted.connect(_on_noise_emitted)
+	_set_navigation_target(patrol_points[patrol_index])
 
 func _build_body() -> void:
 	var shape_node := CollisionShape3D.new()
@@ -64,7 +74,8 @@ func _physics_process(delta: float) -> void:
 	var can_see_player := _can_see_player()
 	if can_see_player:
 		last_known_position = player.global_position
-		state = State.CHASE
+		if state != State.CHASE:
+			state = State.CHASE
 	elif state == State.CHASE and state_timer <= 0.0:
 		state = State.SEARCH
 		state_timer = search_duration
@@ -103,7 +114,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _can_see_player() -> bool:
-	var to_player := player.global_position + Vector3.UP - global_position - Vector3.UP
+	var to_player := player.global_position + Vector3.UP - global_position
 	var distance := to_player.length()
 	if distance > detection_range or distance < 0.01:
 		return false
@@ -115,10 +126,31 @@ func _can_see_player() -> bool:
 	return not sight_ray.is_colliding() or sight_ray.get_collider() == player
 
 func _move_toward(destination: Vector3, speed: float, delta: float) -> void:
+	_set_navigation_target(destination)
 	var offset := destination - global_position
+	if not navigation_agent.is_navigation_finished():
+		var next_position := navigation_agent.get_next_path_position()
+		if next_position.distance_to(global_position) > 0.05:
+			offset = next_position - global_position
 	offset.y = 0.0
 	var direction := offset.normalized()
 	velocity.x = move_toward(velocity.x, direction.x * speed, speed * 3.0 * delta)
 	velocity.z = move_toward(velocity.z, direction.z * speed, speed * 3.0 * delta)
 	if direction.length() > 0.01:
 		look_at(global_position + direction, Vector3.UP)
+
+func _set_navigation_target(destination: Vector3) -> void:
+	if _last_navigation_target.distance_to(destination) > 0.6:
+		_last_navigation_target = destination
+		navigation_agent.target_position = destination
+
+func _on_noise_emitted(world_position: Vector3, audible_radius: float, source: Node3D) -> void:
+	if source == self or state == State.CHASE or state == State.ATTACK:
+		return
+	var hearing_distance := minf(audible_radius, hearing_range)
+	if global_position.distance_to(world_position) > hearing_distance:
+		return
+	last_known_position = world_position
+	state = State.INVESTIGATE
+	state_timer = search_duration
+	_set_navigation_target(world_position)

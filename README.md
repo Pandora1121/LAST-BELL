@@ -1,6 +1,6 @@
 # LAST BELL
 
-An atmospheric first-person horror prototype built with Godot 4.7.2. The playable graybox contains a traversable abandoned-school corridor, mouse-look, walking/sprinting/crouching, flashlight, raycast interaction, a fuse, electrical panel, locker-code clue, exit key, Hall Monitor patrol/chase/attack, pause/settings, game-over recovery, and an exit sequence. All scene geometry is generated from built-in primitives at runtime; no third-party assets are included.
+An atmospheric first-person horror prototype built with Godot 4.7.2. The playable graybox contains a traversable abandoned-school corridor, mouse-look, walking/sprinting/crouching, flashlight, raycast interaction, a fuse, electrical panel, locker-code clue, exit key, Hall Monitor patrol/investigate/chase/search/attack states, pause/settings, game-over recovery, and an exit sequence. Sprinting produces noise the Hall Monitor can hear, while walls block its line of sight. The school corridor uses a NavigationAgent3D over a simple authored navmesh. All scene geometry is generated from built-in primitives at runtime; no third-party assets are included.
 
 ## Run
 
@@ -22,4 +22,4 @@ Explore the corridor and alcoves. Read the note on the right wall for story cont
 
 ## Validation and limitations
 
-Godot 4.7.2 is installed. Headless startup, progression, pause/recovery, and settings persistence checks pass. The scene is procedural graybox geometry with no authored models, animations, or audio assets. No graphical gameplay playthrough has been performed. Monster movement uses direct hallway steering; NavigationAgent3D pathfinding and recovery, ambient/sfx playback, richer rooms, narrative pacing, and Windows export remain incomplete.
+Godot 4.7.2 is installed. Headless startup, progression, pause/recovery, and settings persistence checks pass. The scene is procedural graybox geometry with no authored models, animations, or audio assets. No graphical gameplay playthrough has been performed. Monster movement uses direct hallway steering; NavigationAgent3D pathfinding and recovery, ambient/sfx playback, richer rooms, and narrative pacing remain incomplete. Godot export templates are not installed in this environment, so no Windows executable was produced.

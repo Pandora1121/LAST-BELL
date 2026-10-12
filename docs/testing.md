@@ -11,6 +11,7 @@
 - `tests/test_progression.gd`: fuse requirement, invalid/valid locker code, key, and ending state.
 - `tests/test_pause.gd`: pause, resume, and game-over state.
 - `tests/test_settings.gd`: settings save/load round trip.
+- `tests/test_enemy_perception.gd`: noise range, investigate target, navigation path, forward vision, and wall occlusion.
 
 ## Manual checks (not yet performed)
 
@@ -22,5 +23,6 @@
 ## Current results
 
 - Godot 4.7.2 headless startup passed without parser or runtime errors.
-- Progression, pause/recovery, and settings persistence scripts passed.
+- Progression, pause/recovery, settings persistence, enemy hearing, navigation, and line-of-sight scripts passed.
 - No graphical gameplay check has been performed.
+- The Godot export template directory is empty; no Windows build was generated.

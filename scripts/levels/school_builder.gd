@@ -19,14 +19,28 @@ func _build_school() -> void:
 	_box("RightHallWall", Vector3(4.1, 1.6, 0), Vector3(0.3, 3.2, 42), dark_wall, true)
 	_box("LobbyWall", Vector3(0, 1.6, 21), Vector3(8, 3.2, 0.3), dark_wall, true)
 	_box("FarWall", Vector3(0, 1.6, -21), Vector3(8, 3.2, 0.3), dark_wall, true)
+	var navigation_region := NavigationRegion3D.new()
+	navigation_region.name = "SchoolNavigation"
+	var navigation_mesh := NavigationMesh.new()
+	navigation_mesh.agent_radius = 0.42
+	navigation_mesh.cell_size = 0.2
+	navigation_mesh.vertices = PackedVector3Array([
+		Vector3(-3.55, 0.02, -20.5),
+		Vector3(3.55, 0.02, -20.5),
+		Vector3(3.55, 0.02, 20.5),
+		Vector3(-3.55, 0.02, 20.5)
+	])
+	navigation_mesh.add_polygon(PackedInt32Array([0, 1, 2, 3]))
+	navigation_region.navigation_mesh = navigation_mesh
+	add_child(navigation_region)
 	for z in [-13.0, -3.0, 7.0]:
 		# Short returns create readable room-like alcoves off the main hall.
 		_box("ClassroomLeftReturn", Vector3(-2.6, 1.6, z), Vector3(3.0, 3.2, 0.22), dark_wall, true)
 		_box("ClassroomRightReturn", Vector3(2.6, 1.6, z), Vector3(3.0, 3.2, 0.22), dark_wall, true)
 	for z in [-15.0, -5.0, 5.0, 15.0]:
-		var desk := _box("AbandonedDesk", Vector3(-1.8, 0.45, z), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
+		var desk := _box("AbandonedDesk", Vector3(-3.1, 0.45, z), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
 		desk.rotation.y = 0.04
-		_box("DeskRight", Vector3(1.8, 0.45, z + 2), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
+		_box("DeskRight", Vector3(3.1, 0.45, z + 2), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
 
 func _build_interactables() -> void:
 	var fuse := _interactable("Fuse", Vector3(-2.3, 0.35, -12.5), Vector3(0.36, 0.2, 0.25), "[E] Pick up fuse", item_color)
