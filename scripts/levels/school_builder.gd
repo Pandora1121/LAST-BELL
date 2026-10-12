@@ -69,6 +69,7 @@ func _build_lights() -> void:
 	add_child(env)
 	for z in [-16.0, -6.0, 4.0, 14.0]:
 		var light := OmniLight3D.new()
+		light.set_script(load("res://scripts/levels/flickering_light.gd"))
 		light.position = Vector3(0, 3.1, z)
 		light.light_color = Color(0.58, 0.69, 0.76)
 		light.light_energy = 0.72
