@@ -1,0 +1,25 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+config/name="LAST BELL"
+run/main_scene="res://scenes/main/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[autoload]
+SaveManager="*res://scripts/autoload/save_manager.gd"
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+environment/defaults/default_clear_color=Color(0.008, 0.012, 0.02, 1)
+
+[audio]
+default_bus_layout="res://resources/audio_bus_layout.tres"
