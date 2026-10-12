@@ -36,6 +36,8 @@ func interact(_player: CharacterBody3D, game: Node) -> void:
 				game.set_message("Locked. The exit key is somewhere in the school.")
 			else:
 				game.set_message("The final bell rings. You escape into the night.")
+				game.game_complete = true
+				game.refresh_hud()
 				game.status_label.add_theme_color_override("font_color", Color(0.8, 0.9, 0.72))
 				game.get_tree().paused = true
 		"note":

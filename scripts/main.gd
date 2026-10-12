@@ -6,12 +6,15 @@ const HallMonitor = preload("res://scripts/enemy/hall_monitor.gd")
 
 var player: CharacterBody3D
 var status_label: Label
+var objective_label: Label
+var inventory_label: Label
 var hint_label: Label
 var paused := false
 var has_fuse := false
 var power_restored := false
 var has_key := false
 var game_over := false
+var game_complete := false
 var code_panel: PanelContainer
 var code_input: LineEdit
 var pause_panel: PanelContainer
@@ -43,6 +46,27 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func set_message(message: String) -> void:
 	status_label.text = message
+	refresh_hud()
+
+func refresh_hud() -> void:
+	if game_complete:
+		objective_label.text = "Objective complete — escape into the night."
+	elif game_over:
+		objective_label.text = "Caught. Restart to try the route again."
+	elif not has_fuse:
+		objective_label.text = "Objective: Find the fuse in the classroom alcoves."
+	elif not power_restored:
+		objective_label.text = "Objective: Restore power at the electrical panel."
+	elif not has_key:
+		objective_label.text = "Objective: Read the note and unlock locker 14."
+	else:
+		objective_label.text = "Objective: Unlock the exit."
+	var items: Array[String] = []
+	if has_fuse:
+		items.append("Fuse")
+	if has_key:
+		items.append("Exit key")
+	inventory_label.text = "Inventory: " + (", ".join(items) if not items.is_empty() else "Empty")
 
 func set_hint(message: String) -> void:
 	hint_label.text = message
@@ -99,6 +123,16 @@ func _build_hud() -> void:
 	status_label.position = Vector2(24, 22)
 	status_label.add_theme_font_size_override("font_size", 18)
 	center.add_child(status_label)
+	objective_label = Label.new()
+	objective_label.position = Vector2(24, 54)
+	objective_label.add_theme_font_size_override("font_size", 15)
+	center.add_child(objective_label)
+	inventory_label = Label.new()
+	inventory_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	inventory_label.position = Vector2(930, 22)
+	inventory_label.size = Vector2(320, 56)
+	inventory_label.add_theme_font_size_override("font_size", 15)
+	center.add_child(inventory_label)
 	hint_label = Label.new()
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
@@ -134,6 +168,7 @@ func _build_hud() -> void:
 	close_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	code_box.add_child(close_hint)
 	_build_menus(center)
+	refresh_hud()
 
 func _build_menus(parent: Control) -> void:
 	pause_panel = PanelContainer.new()
@@ -234,6 +269,7 @@ func show_game_over() -> void:
 	if game_over:
 		return
 	game_over = true
+	refresh_hud()
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var overlay := ColorRect.new()
