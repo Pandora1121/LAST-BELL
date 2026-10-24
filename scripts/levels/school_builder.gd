@@ -93,7 +93,10 @@ func _build_side_room(room_name: String, side: int, center_z: float) -> void:
 	_box(room_name + "OuterWall", Vector3(12.25 * side, 1.6, center_z), Vector3(0.3, 3.2, 8.0), dark_wall, true)
 	_box(room_name + "NorthWall", Vector3(center_x, 1.6, center_z - 4.0), Vector3(8.2, 3.2, 0.3), dark_wall, true)
 	_box(room_name + "SouthWall", Vector3(center_x, 1.6, center_z + 4.0), Vector3(8.2, 3.2, 0.3), dark_wall, true)
-	_box(room_name + "Desk", Vector3(center_x, 0.45, center_z + 1.0), Vector3(1.8, 0.9, 1.0), Color(0.19, 0.16, 0.13), true)
+	var desk_z := center_z + 1.0
+	if room_name == "StorageRoom":
+		desk_z = center_z + 2.5
+	_box(room_name + "Desk", Vector3(center_x, 0.45, desk_z), Vector3(1.8, 0.9, 1.0), Color(0.19, 0.16, 0.13), true)
 	if room_name == "ClassroomA":
 		var board_z := center_z - 3.78
 		_box("ClassroomChalkboard", Vector3(center_x, 2.05, board_z), Vector3(4.8, 1.25, 0.06), Color(0.055, 0.12, 0.105), false)
