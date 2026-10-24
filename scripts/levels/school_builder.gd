@@ -94,6 +94,15 @@ func _build_side_room(room_name: String, side: int, center_z: float) -> void:
 	_box(room_name + "NorthWall", Vector3(center_x, 1.6, center_z - 4.0), Vector3(8.2, 3.2, 0.3), dark_wall, true)
 	_box(room_name + "SouthWall", Vector3(center_x, 1.6, center_z + 4.0), Vector3(8.2, 3.2, 0.3), dark_wall, true)
 	_box(room_name + "Desk", Vector3(center_x, 0.45, center_z + 1.0), Vector3(1.8, 0.9, 1.0), Color(0.19, 0.16, 0.13), true)
+	if room_name == "ClassroomA":
+		var board_z := center_z - 3.78
+		_box("ClassroomChalkboard", Vector3(center_x, 2.05, board_z), Vector3(4.8, 1.25, 0.06), Color(0.055, 0.12, 0.105), false)
+		_box("ChalkboardTopFrame", Vector3(center_x, 2.72, board_z + 0.04), Vector3(5.0, 0.1, 0.12), Color(0.24, 0.19, 0.14), false)
+		_box("ChalkboardBottomFrame", Vector3(center_x, 1.38, board_z + 0.04), Vector3(5.0, 0.1, 0.12), Color(0.24, 0.19, 0.14), false)
+		_box("ChalkboardLeftFrame", Vector3(center_x - 2.45, 2.05, board_z + 0.04), Vector3(0.1, 1.42, 0.12), Color(0.24, 0.19, 0.14), false)
+		_box("ChalkboardRightFrame", Vector3(center_x + 2.45, 2.05, board_z + 0.04), Vector3(0.1, 1.42, 0.12), Color(0.24, 0.19, 0.14), false)
+		_box("ChalkTraceOne", Vector3(center_x - 1.25, 2.28, board_z + 0.045), Vector3(1.15, 0.035, 0.015), Color(0.55, 0.58, 0.49), false)
+		_box("ChalkTraceTwo", Vector3(center_x + 0.65, 1.9, board_z + 0.045), Vector3(1.6, 0.035, 0.015), Color(0.55, 0.58, 0.49), false)
 
 func _build_lights() -> void:
 	var env := WorldEnvironment.new()
