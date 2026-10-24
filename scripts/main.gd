@@ -293,6 +293,7 @@ func request_locker_code() -> void:
 func _submit_locker_code(code: String) -> void:
 	if code == "1947":
 		has_key = true
+		AudioManager.play_sfx(&"locker")
 		set_message("The locker opens. Exit key collected.")
 	else:
 		set_message("Wrong code. The note said 1947.")

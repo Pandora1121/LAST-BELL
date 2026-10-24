@@ -9,6 +9,7 @@ func interact(_player: CharacterBody3D, game: Node) -> void:
 		"fuse":
 			if not game.has_fuse:
 				game.has_fuse = true
+				AudioManager.play_sfx(&"pickup", randf_range(0.96, 1.04))
 				game.set_message("Fuse collected. Find the electrical panel.")
 				queue_free()
 			else:
@@ -18,6 +19,7 @@ func interact(_player: CharacterBody3D, game: Node) -> void:
 				game.set_message("The key is stuck in the locker. Restore power first.")
 			elif not game.has_key:
 				game.has_key = true
+				AudioManager.play_sfx(&"pickup", randf_range(0.96, 1.04))
 				game.set_message("Exit key collected. Return to the lobby.")
 				queue_free()
 		"locker":
@@ -28,13 +30,17 @@ func interact(_player: CharacterBody3D, game: Node) -> void:
 		"panel":
 			if not game.has_fuse:
 				game.set_message("A fuse is missing. Search the classrooms.")
-			else:
+			elif not game.power_restored:
 				game.power_restored = true
+				AudioManager.play_sfx(&"power")
 				game.set_message("Power restored. A locker clicks open down the hall.")
+			else:
+				game.set_message("The panel is already live.")
 		"door":
 			if not game.has_key:
 				game.set_message("Locked. The exit key is somewhere in the school.")
 			else:
+				AudioManager.play_sfx(&"exit")
 				game.set_message("The final bell rings. You escape into the night.")
 				game.game_complete = true
 				game.refresh_hud()

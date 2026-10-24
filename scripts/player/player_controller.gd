@@ -75,6 +75,14 @@ func _physics_process(delta: float) -> void:
 		if footstep_timer <= 0.0:
 			var noise_radius := 2.0 if crouching else (13.0 if speed == sprint_speed else 5.0)
 			NoiseManager.report_noise(global_position, noise_radius, self)
+			if is_on_floor() and Vector2(velocity.x, velocity.z).length() > 0.2:
+				var step_pitch := randf_range(0.96, 1.04)
+				var step_volume := -5.0 if crouching else (1.0 if speed == sprint_speed else -1.5)
+				if crouching:
+					step_pitch *= 0.88
+				elif speed == sprint_speed:
+					step_pitch *= 1.12
+				AudioManager.play_sfx(&"footstep", step_pitch, step_volume)
 			footstep_timer = 0.7 if crouching else (0.42 if speed == sprint_speed else 0.58)
 	else:
 		footstep_timer = 0.0

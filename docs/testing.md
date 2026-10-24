@@ -26,6 +26,7 @@
 - Godot 4.7.2 headless startup passed without parser or runtime errors.
 - Progression, pause/recovery, settings persistence, enemy hearing, navigation, and line-of-sight scripts passed.
 - Audio resource import, loop configuration, and bus checks passed headlessly; listening quality still needs a graphical session.
+- Original one-shot sounds now cover footsteps, item pickup, restoring power, unlocking locker 14, and completing the exit interaction. Their balance and sound quality have not been evaluated in a graphical session.
 - No graphical gameplay check has been performed.
 - The Godot export template directory is empty; no Windows build was generated.
 - Audio assets are generated locally; their mix and the flicker pacing have not been evaluated in a graphical session.
