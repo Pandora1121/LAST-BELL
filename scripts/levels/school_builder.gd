@@ -103,6 +103,15 @@ func _build_side_room(room_name: String, side: int, center_z: float) -> void:
 		_box("ChalkboardRightFrame", Vector3(center_x + 2.45, 2.05, board_z + 0.04), Vector3(0.1, 1.42, 0.12), Color(0.24, 0.19, 0.14), false)
 		_box("ChalkTraceOne", Vector3(center_x - 1.25, 2.28, board_z + 0.045), Vector3(1.15, 0.035, 0.015), Color(0.55, 0.58, 0.49), false)
 		_box("ChalkTraceTwo", Vector3(center_x + 0.65, 1.9, board_z + 0.045), Vector3(1.6, 0.035, 0.015), Color(0.55, 0.58, 0.49), false)
+	elif room_name == "StorageRoom":
+		var shelf_z := center_z - 3.55
+		for shelf_y in [0.55, 1.25, 1.95]:
+			_box("StorageShelf", Vector3(center_x, shelf_y, shelf_z), Vector3(3.2, 0.12, 0.42), Color(0.2, 0.16, 0.12), false)
+		for support_x in [center_x - 1.48, center_x + 1.48]:
+			_box("StorageShelfSupport", Vector3(support_x, 1.2, shelf_z), Vector3(0.14, 2.2, 0.38), Color(0.16, 0.13, 0.1), false)
+		_box("StorageCrate", Vector3(center_x - 0.78, 0.88, shelf_z + 0.28), Vector3(0.78, 0.48, 0.5), Color(0.32, 0.25, 0.17), false)
+		_box("StorageCrate", Vector3(center_x + 0.72, 0.88, shelf_z + 0.28), Vector3(0.9, 0.48, 0.5), Color(0.27, 0.22, 0.16), false)
+		_box("StorageCrate", Vector3(center_x - 0.55, 1.58, shelf_z + 0.28), Vector3(0.9, 0.48, 0.5), Color(0.3, 0.23, 0.16), false)
 
 func _build_lights() -> void:
 	var env := WorldEnvironment.new()
@@ -179,7 +188,7 @@ func _surface_for_name(label: String) -> StringName:
 		return &"floor"
 	if key.contains("ceiling"):
 		return &"ceiling"
-	if key.contains("desk"):
+	if key.contains("desk") or key.contains("shelf") or key.contains("crate"):
 		return &"wood"
 	if key.contains("door"):
 		return &"wood"
