@@ -1,6 +1,6 @@
 # LAST BELL
 
-An atmospheric first-person horror prototype built with Godot 4.7.2. The playable school connects a corridor to a classroom, teachers' room, and storage room. It includes mouse-look, walking, sprinting, crouching, flashlight, raycast interaction, a fuse/power/locker/exit puzzle, and two threats: the Hall Monitor crawler and a masked missing student. The Hall Monitor patrols, investigates, chases, searches, and attacks; sprinting can draw its attention, while walls block its line of sight. Both threats use authored navigation regions. The school, character meshes, surface textures, ambience, and gameplay sounds are generated locally; no third-party assets are included.
+An atmospheric third-person horror prototype built with Godot 4.7.2. The playable school connects a corridor to classroom alcoves, the teachers' room, and storage room. It includes mouse-look, walking, sprinting, crouching, flashlight, raycast interaction, a fuse/power/locker/exit puzzle, and two threats: the Hall Monitor crawler and a masked missing student. The player uses an optional locally installed Hina character asset; see `assets/characters/hina/README.md`. The Hall Monitor patrols, investigates, chases, searches, and attacks; sprinting can draw its attention, while walls block its line of sight. Both threats use authored navigation regions. The school, enemy meshes, surface textures, ambience, and gameplay sounds are generated locally.
 
 ## Run
 

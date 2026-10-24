@@ -33,12 +33,13 @@ func _build_body() -> void:
 	add_child(collider)
 	camera = Camera3D.new()
 	camera.name = "Camera3D"
-	camera.position.y = 1.55
+	camera.position = Vector3(0.35, 2.0, 4.2)
 	camera.cull_mask = 1
 	camera.current = true
 	add_child(camera)
+	camera.look_at(global_position + Vector3(0.0, 1.15, -2.5), Vector3.UP)
 	ray = RayCast3D.new()
-	ray.target_position = Vector3(0, 0, -interaction_distance)
+	ray.target_position = Vector3(0.0, 0.0, -(interaction_distance + camera.position.distance_to(Vector3(0.0, 1.0, 0.0))))
 	ray.collide_with_areas = true
 	ray.enabled = true
 	camera.add_child(ray)
@@ -49,23 +50,22 @@ func _build_body() -> void:
 	flashlight.spot_angle = 38.0
 	flashlight.shadow_enabled = true
 	camera.add_child(flashlight)
-	_build_character_shadow()
-	_build_first_person_hands()
+	_build_character_visual()
 
-func _build_character_shadow() -> void:
+func _build_character_visual() -> void:
 	if not ResourceLoader.exists(HINA_MODEL_PATH):
 		return
 	var character_scene := load(HINA_MODEL_PATH) as PackedScene
 	if character_scene == null:
-		push_warning("Hina player model could not be loaded; using the procedural first-person hands only.")
+		push_warning("Hina player model could not be loaded; the player body will be hidden.")
 		return
 	var character := character_scene.instantiate()
-	character.name = "HinaCharacterShadow"
+	character.name = "HinaCharacter"
 	add_child(character)
 	for visual in character.find_children("*", "GeometryInstance3D", true, false):
 		var geometry := visual as GeometryInstance3D
-		geometry.layers = 2
-		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+		geometry.layers = 1
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 
 func _build_first_person_hands() -> void:
 	hands_rig = Node3D.new()
