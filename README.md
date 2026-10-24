@@ -1,6 +1,6 @@
 # LAST BELL
 
-An atmospheric first-person horror prototype built with Godot 4.7.2. The playable graybox contains a traversable school corridor connected to a classroom, teachers' room, and storage room; mouse-look; walking, sprinting, and crouching; flashlight; raycast interaction; fuse, electrical panel, locker-code clue, exit key; Hall Monitor patrol/investigate/chase/search/attack states; pause/settings; game-over recovery; and an exit sequence. Sprinting produces noise the Hall Monitor can hear, while walls block its line of sight. The school uses a NavigationAgent3D over an authored corridor and doorway navmesh; fluorescent lights flicker intermittently, generated school-room tone and a distant bell provide basic ambience, and original generated one-shot effects cover footsteps and key progression interactions. All scene geometry and audio effects are generated locally; no third-party assets are included.
+An atmospheric first-person horror prototype built with Godot 4.7.2. The playable school connects a corridor to a classroom, teachers' room, and storage room. It includes mouse-look, walking, sprinting, crouching, flashlight, raycast interaction, a fuse/power/locker/exit puzzle, and two threats: the Hall Monitor crawler and a masked missing student. The Hall Monitor patrols, investigates, chases, searches, and attacks; sprinting can draw its attention, while walls block its line of sight. Both threats use authored navigation regions. The school, character meshes, surface textures, ambience, and gameplay sounds are generated locally; no third-party assets are included.
 
 ## Run
 
@@ -22,7 +22,7 @@ Explore the corridor and alcoves. Read the note on the right wall for story cont
 
 ## Validation and limitations
 
-Godot 4.7.2 is installed. Headless startup, progression, pause/recovery, settings persistence, enemy perception/navigation, and the original ambience resource checks passed before the latest gameplay SFX changes. The scene is procedural graybox geometry with no authored models or animations. No graphical gameplay playthrough has been performed, so the generated audio mix and flicker pacing still need listening and visual QA. Richer rooms and a longer narrative remain incomplete. Godot export templates are not installed in this environment, so no Windows executable was produced.
+Godot 4.7.2 is installed. Headless startup, progression, pause/recovery, settings persistence, enemy perception/navigation, and audio-resource checks passed before the latest visual and gameplay input changes. Character geometry and school materials are assembled/generated at runtime and still need a graphical playthrough for visual QA. Generated audio mix and flicker pacing also need listening. Richer rooms and a longer narrative remain incomplete. Godot export templates are not installed in this environment, so no Windows executable was produced.
 
 ## Audio assets
 

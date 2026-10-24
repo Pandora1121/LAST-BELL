@@ -1,5 +1,7 @@
 extends Node3D
 
+const SchoolMaterials = preload("res://scripts/visual/school_surface_materials.gd")
+
 const WALL := 0
 var dark_wall := Color(0.12, 0.14, 0.16)
 var floor_color := Color(0.17, 0.18, 0.19)
@@ -123,9 +125,7 @@ func _box(label: String, at: Vector3, size: Vector3, tint: Color, solid: bool) -
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	mesh_instance.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.albedo_color = tint
-	material.roughness = 0.92
+	var material := SchoolMaterials.make(_surface_for_name(label), tint)
 	mesh_instance.material_override = material
 	body.add_child(mesh_instance)
 	if solid:
@@ -147,9 +147,7 @@ func _interactable(label: String, at: Vector3, size: Vector3, interaction_prompt
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	mesh_instance.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.albedo_color = tint
-	material.roughness = 0.85
+	var material := SchoolMaterials.make(_surface_for_name(label), tint)
 	mesh_instance.material_override = material
 	body.add_child(mesh_instance)
 	var collision := CollisionShape3D.new()
@@ -159,3 +157,19 @@ func _interactable(label: String, at: Vector3, size: Vector3, interaction_prompt
 	body.add_child(collision)
 	add_child(body)
 	return body
+
+func _surface_for_name(label: String) -> StringName:
+	var key := label.to_lower()
+	if key.contains("floor"):
+		return &"floor"
+	if key.contains("ceiling"):
+		return &"ceiling"
+	if key.contains("desk"):
+		return &"wood"
+	if key.contains("door"):
+		return &"wood"
+	if key.contains("note"):
+		return &"paper"
+	if key.contains("fuse") or key.contains("locker") or key.contains("panel"):
+		return &"metal"
+	return &"wall"
