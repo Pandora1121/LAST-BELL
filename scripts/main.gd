@@ -3,6 +3,7 @@ extends Node3D
 const PlayerController = preload("res://scripts/player/player_controller.gd")
 const SchoolBuilder = preload("res://scripts/levels/school_builder.gd")
 const HallMonitor = preload("res://scripts/enemy/hall_monitor.gd")
+const AbsentStudent = preload("res://scripts/enemy/absent_student.gd")
 
 var player: CharacterBody3D
 var status_label: Label
@@ -22,10 +23,37 @@ var settings_panel: PanelContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_capture_mouse()
 	_build_input_map()
 	_build_world()
 	_build_hud()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_IN and not paused and not game_over:
+		_capture_mouse()
+
+func _capture_mouse() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func _input(event: InputEvent) -> void:
+	# Some window managers and embedded game views release the cursor on launch.
+	# A click anywhere in active gameplay should restore mouse-look immediately.
+	if event is InputEventMouseButton and event.pressed and not paused and not game_over:
+		_capture_mouse()
+	if event is InputEventMouseMotion and not paused and not game_over and is_instance_valid(player):
+		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+			_capture_mouse()
+		player.rotate_y(-event.relative.x * SaveManager.mouse_sensitivity)
+		var camera := player.get_node_or_null("Camera3D") as Camera3D
+		if is_instance_valid(camera):
+			camera.rotate_x(-event.relative.y * SaveManager.mouse_sensitivity)
+			camera.rotation.x = clampf(camera.rotation.x, -1.48, 1.48)
+	if game_over and event is InputEventKey and event.pressed:
+		if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+			get_tree().paused = false
+			get_tree().reload_current_scene()
+		elif event.keycode == KEY_ESCAPE:
+			get_tree().quit()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
@@ -41,8 +69,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_tree().paused = paused
 			pause_panel.visible = paused
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if paused else Input.MOUSE_MODE_CAPTURED
-	if event is InputEventMouseButton and not paused:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func set_message(message: String) -> void:
 	status_label.text = message
@@ -104,6 +130,18 @@ func _build_world() -> void:
 	monitor.set_script(HallMonitor)
 	monitor.position = Vector3(0, 0.1, -8)
 	add_child(monitor)
+	var student := CharacterBody3D.new()
+	student.name = "AbsentStudent"
+	student.set_script(AbsentStudent)
+	student.position = Vector3(10.2, 0.1, -3.0)
+	student.set("patrol_points", [Vector3(10.2, 0.1, -3.55), Vector3(10.2, 0.1, -2.45)])
+	student.set("patrol_speed", 0.95)
+	student.set("chase_speed", 2.25)
+	student.set("detection_range", 9.0)
+	student.set("field_of_view_degrees", 82.0)
+	student.set("hearing_range", 10.0)
+	student.set("attack_distance", 1.2)
+	add_child(student)
 
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
@@ -141,7 +179,7 @@ func _build_hud() -> void:
 	hint_label.add_theme_font_size_override("font_size", 17)
 	center.add_child(hint_label)
 	var controls := Label.new()
-	controls.text = "WASD move  •  Shift run  •  Ctrl crouch  •  F flashlight  •  E interact  •  Esc pause"
+	controls.text = "Click game to capture mouse  •  WASD move  •  Shift run  •  Ctrl crouch  •  F flashlight  •  E interact  •  Esc pause"
 	controls.position = Vector2(24, 680)
 	controls.add_theme_font_size_override("font_size", 13)
 	center.add_child(controls)
@@ -277,7 +315,7 @@ func show_game_over() -> void:
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	status_label.get_parent().add_child(overlay)
 	var message := Label.new()
-	message.text = "THE HALL MONITOR FOUND YOU\n\nPress Enter to try again  •  Esc to quit"
+	message.text = "SOMETHING FOUND YOU\n\nPress Enter to try again  •  Esc to quit"
 	message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	message.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	message.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -299,11 +337,3 @@ func _submit_locker_code(code: String) -> void:
 		set_message("Wrong code. The note said 1947.")
 	code_panel.visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func _input(event: InputEvent) -> void:
-	if game_over and event is InputEventKey and event.pressed:
-		if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
-			get_tree().paused = false
-			get_tree().reload_current_scene()
-		elif event.keycode == KEY_ESCAPE:
-			get_tree().quit()

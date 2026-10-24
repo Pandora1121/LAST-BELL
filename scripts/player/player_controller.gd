@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+const CharacterMaterials = preload("res://scripts/visual/character_materials.gd")
+
 @export var walk_speed := 3.2
 @export var sprint_speed := 5.6
 @export var crouch_speed := 1.65
@@ -11,6 +13,7 @@ extends CharacterBody3D
 var camera: Camera3D
 var ray: RayCast3D
 var flashlight: SpotLight3D
+var hands_rig: Node3D
 var crouching := false
 var world: Node
 var footstep_timer := 0.0
@@ -44,13 +47,43 @@ func _build_body() -> void:
 	flashlight.spot_angle = 38.0
 	flashlight.shadow_enabled = true
 	camera.add_child(flashlight)
+	_build_first_person_hands()
+
+func _build_first_person_hands() -> void:
+	hands_rig = Node3D.new()
+	hands_rig.name = "FirstPersonHands"
+	camera.add_child(hands_rig)
+	for side in [-1.0, 1.0]:
+		var sleeve := MeshInstance3D.new()
+		var sleeve_mesh := CapsuleMesh.new()
+		sleeve_mesh.radius = 0.115
+		sleeve_mesh.height = 0.74
+		sleeve.mesh = sleeve_mesh
+		sleeve.position = Vector3(side * 0.31, -0.43, -0.68)
+		sleeve.rotation.z = side * -0.34
+		sleeve.material_override = CharacterMaterials.uniform()
+		hands_rig.add_child(sleeve)
+		var cuff := MeshInstance3D.new()
+		var cuff_mesh := CylinderMesh.new()
+		cuff_mesh.top_radius = 0.118
+		cuff_mesh.bottom_radius = 0.118
+		cuff_mesh.height = 0.12
+		cuff.mesh = cuff_mesh
+		cuff.position = Vector3(side * 0.25, -0.66, -0.68)
+		cuff.rotation.z = side * -0.34
+		cuff.material_override = CharacterMaterials.bone()
+		hands_rig.add_child(cuff)
+		var hand := MeshInstance3D.new()
+		var hand_mesh := SphereMesh.new()
+		hand_mesh.radius = 0.11
+		hand_mesh.height = 0.2
+		hand.mesh = hand_mesh
+		hand.position = Vector3(side * 0.23, -0.77, -0.76)
+		hand.scale = Vector3(0.9, 1.15, 0.7)
+		hand.material_override = CharacterMaterials.skin()
+		hands_rig.add_child(hand)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		var sensitivity: float = SaveManager.mouse_sensitivity
-		rotate_y(-event.relative.x * sensitivity)
-		camera.rotate_x(-event.relative.y * sensitivity)
-		camera.rotation.x = clampf(camera.rotation.x, -1.48, 1.48)
 	if event.is_action_pressed("flashlight"):
 		flashlight.visible = not flashlight.visible
 	if event.is_action_pressed("interact"):
@@ -96,7 +129,12 @@ func _interact() -> void:
 	if target.has_method("interact"):
 		target.interact(self, world)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if is_instance_valid(hands_rig):
+		var moving := not get_tree().paused and is_on_floor() and Vector2(velocity.x, velocity.z).length() > 0.2
+		var bob_rate := 13.0 if Input.is_action_pressed("sprint") else 9.0
+		var bob := sin(Time.get_ticks_msec() * 0.001 * bob_rate) * 0.018 if moving else 0.0
+		hands_rig.position.y = move_toward(hands_rig.position.y, bob, delta * 0.16)
 	if not is_instance_valid(world) or not is_instance_valid(ray):
 		return
 	ray.force_raycast_update()
