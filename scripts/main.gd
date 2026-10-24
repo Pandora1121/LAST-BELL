@@ -139,7 +139,7 @@ func _build_world() -> void:
 	student.set("chase_speed", 2.25)
 	student.set("detection_range", 9.0)
 	student.set("field_of_view_degrees", 82.0)
-	student.set("hearing_range", 10.0)
+	student.set("hearing_range", 24.0)
 	student.set("attack_distance", 1.2)
 	add_child(student)
 

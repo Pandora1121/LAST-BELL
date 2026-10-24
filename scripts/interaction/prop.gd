@@ -33,7 +33,9 @@ func interact(_player: CharacterBody3D, game: Node) -> void:
 			elif not game.power_restored:
 				game.power_restored = true
 				AudioManager.play_sfx(&"power")
-				game.set_message("Power restored. A locker clicks open down the hall.")
+				AudioManager.play_bell()
+				NoiseManager.report_noise(global_position, 26.0, self)
+				game.set_message("The power returns. The final bell rings... something stirs in the hall.")
 			else:
 				game.set_message("The panel is already live.")
 		"door":

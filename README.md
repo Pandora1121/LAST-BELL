@@ -18,11 +18,11 @@ Open this folder in Godot 4.7.2 or later and press **F6/F5** (or run `scenes/mai
 
 ## Prototype route
 
-Explore the corridor and alcoves. Read the note on the right wall for story context and locker code. Find the fuse and use the electrical panel near the far end. Open locker 14 with the code, collect the exit key, and return to the far exit door. Avoid the Hall Monitor; if caught, press Enter to restart.
+Explore the corridor and alcoves. Read the note on the right wall for story context and locker code. Find the fuse and use the electrical panel near the far end. Restoring power rings the final bell and alerts both threats, so plan a route before activating it. Open locker 14 with the code, collect the exit key, and return to the far exit door. Avoid the threats; if caught, press Enter to restart.
 
 ## Validation and limitations
 
-Godot 4.7.2 is installed. Headless startup, progression, pause/recovery, settings persistence, enemy perception/navigation, and audio-resource checks passed before the latest visual and gameplay input changes. Character geometry and school materials are assembled/generated at runtime and still need a graphical playthrough for visual QA. Generated audio mix and flicker pacing also need listening. Richer rooms and a longer narrative remain incomplete. Godot export templates are not installed in this environment, so no Windows executable was produced.
+Godot 4.7.2 is installed. Headless startup, progression, pause/recovery, settings persistence, enemy perception/navigation, and audio-resource checks passed before the latest visual, input, and bell-escalation changes. Character geometry and school materials are assembled/generated at runtime and still need a graphical playthrough for visual QA. Generated audio mix and flicker pacing also need listening. Richer rooms and a longer narrative remain incomplete. Godot export templates are not installed in this environment, so no Windows executable was produced.
 
 ## Audio assets
 

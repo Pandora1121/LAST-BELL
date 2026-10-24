@@ -82,6 +82,11 @@ func play_sfx(sound_name: StringName, pitch_scale := 1.0, volume_db := 0.0) -> v
 			_sfx_player_cursor = (index + 1) % sfx_players.size()
 			return
 
+func play_bell() -> void:
+	if DisplayServer.get_name() == "headless" or not is_instance_valid(bell_player):
+		return
+	bell_player.play()
+
 func _setup_announcement() -> void:
 	announcement_timer = Timer.new()
 	announcement_timer.name = "FinalBellCue"
