@@ -18,7 +18,7 @@ Open this folder in Godot 4.7.2 or later and press **F6/F5** (or run `scenes/mai
 
 ## Prototype route
 
-Explore the corridor and alcoves. Read the note on the right wall for story context and locker code. Find the fuse and use the electrical panel near the far end. Restoring power rings the final bell and alerts both threats, so plan a route before activating it. Open locker 14 with the code, collect the exit key, and return to the far exit door. Avoid the threats; if caught, press Enter to restart.
+Explore the corridor and alcoves. Optional notes in the classroom and storage room reveal more about Student 14 and the final bell; the note on the right wall gives the locker code. Find the fuse and use the electrical panel near the far end. Restoring power rings the final bell and alerts both threats, so plan a route before activating it. Open locker 14 with the code, collect the exit key, and return to the far exit door. Avoid the threats; if caught, press Enter to restart.
 
 ## Validation and limitations
 

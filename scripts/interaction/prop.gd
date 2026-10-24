@@ -49,4 +49,5 @@ func interact(_player: CharacterBody3D, game: Node) -> void:
 				game.status_label.add_theme_color_override("font_color", Color(0.8, 0.9, 0.72))
 				game.get_tree().paused = true
 		"note":
-			game.set_message("Torn note: “Locker 14. The code is 1947. Don't answer the bell.”")
+			var note_message := str(get_meta("message", "Torn note: Locker 14. The code is 1947. Do not answer the bell."))
+			game.set_message(note_message)

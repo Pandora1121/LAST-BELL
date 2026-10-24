@@ -70,6 +70,12 @@ func _build_school() -> void:
 func _build_interactables() -> void:
 	var fuse := _interactable("Fuse", Vector3(-8.1, 1.0, -13.0), Vector3(0.36, 0.2, 0.25), "[E] Pick up fuse", item_color)
 	fuse.set_meta("kind", "fuse")
+	var attendance_note := _interactable("AttendanceNote", Vector3(-11.55, 1.0, -13.0), Vector3(0.22, 0.3, 0.04), "[E] Read attendance slip", Color(0.65, 0.6, 0.46))
+	attendance_note.set_meta("kind", "note")
+	attendance_note.set_meta("message", "Attendance: Student 14 remained marked present after the last bell.")
+	var maintenance_note := _interactable("MaintenanceNote", Vector3(-11.55, 1.0, 7.0), Vector3(0.22, 0.3, 0.04), "[E] Read maintenance log", Color(0.57, 0.54, 0.43))
+	maintenance_note.set_meta("kind", "note")
+	maintenance_note.set_meta("message", "Maintenance log: The bell rang with the power off. Nobody answered.")
 	var locker := _interactable("Locker14", Vector3(8.8, 0.9, -3.0), Vector3(0.72, 1.8, 0.72), "[E] Open locker 14", Color(0.19, 0.25, 0.23))
 	locker.set_meta("kind", "locker")
 	var panel := _interactable("ElectricalPanel", Vector3(-3.55, 1.25, -18.0), Vector3(0.14, 1.2, 0.9), "[E] Restore power", Color(0.22, 0.24, 0.22))
