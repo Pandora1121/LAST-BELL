@@ -1,3 +1,6 @@
 .godot/
 .localdata/
+.game-dev/
 exports/
+assets/characters/hina/*
+!assets/characters/hina/README.md

@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 const CharacterMaterials = preload("res://scripts/visual/character_materials.gd")
+const HINA_MODEL_PATH := "res://assets/characters/hina/model.glb"
 
 @export var walk_speed := 3.2
 @export var sprint_speed := 5.6
@@ -33,6 +34,7 @@ func _build_body() -> void:
 	camera = Camera3D.new()
 	camera.name = "Camera3D"
 	camera.position.y = 1.55
+	camera.cull_mask = 1
 	camera.current = true
 	add_child(camera)
 	ray = RayCast3D.new()
@@ -47,7 +49,23 @@ func _build_body() -> void:
 	flashlight.spot_angle = 38.0
 	flashlight.shadow_enabled = true
 	camera.add_child(flashlight)
+	_build_character_shadow()
 	_build_first_person_hands()
+
+func _build_character_shadow() -> void:
+	if not ResourceLoader.exists(HINA_MODEL_PATH):
+		return
+	var character_scene := load(HINA_MODEL_PATH) as PackedScene
+	if character_scene == null:
+		push_warning("Hina player model could not be loaded; using the procedural first-person hands only.")
+		return
+	var character := character_scene.instantiate()
+	character.name = "HinaCharacterShadow"
+	add_child(character)
+	for visual in character.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := visual as GeometryInstance3D
+		geometry.layers = 2
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 
 func _build_first_person_hands() -> void:
 	hands_rig = Node3D.new()
