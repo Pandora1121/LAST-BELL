@@ -65,7 +65,10 @@ func _build_school() -> void:
 	for z in [-15.0, -5.0, 5.0, 15.0]:
 		var desk := _box("AbandonedDesk", Vector3(-3.1, 0.45, z), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
 		desk.rotation.y = 0.04
-		_box("DeskRight", Vector3(3.1, 0.45, z + 2), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
+		var right_desk_z: float = z + 2.0
+		if is_equal_approx(z, -5.0):
+			right_desk_z = -0.5
+		_box("DeskRight", Vector3(3.1, 0.45, right_desk_z), Vector3(1.4, 0.9, 0.7), Color(0.19, 0.16, 0.13), true)
 
 func _build_interactables() -> void:
 	var fuse := _interactable("Fuse", Vector3(-8.1, 1.0, -13.0), Vector3(0.36, 0.2, 0.25), "[E] Pick up fuse", item_color)

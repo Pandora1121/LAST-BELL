@@ -13,6 +13,7 @@
 - `tests/test_settings.gd`: settings save/load round trip.
 - `tests/test_enemy_perception.gd`: noise range, investigate target, navigation path, forward vision, and wall occlusion.
 - `tests/test_audio_setup.gd`: required audio streams and playback setup.
+- `tests/test_teachers_doorway.gd`: move the player capsule through the first right-side doorway and assert that no collision blocks it.
 
 ## Manual checks (not yet performed)
 
@@ -25,6 +26,7 @@
 
 - Godot 4.7.2 headless startup passed without parser or runtime errors.
 - Progression, pause/recovery, settings persistence, enemy hearing, navigation, and line-of-sight scripts passed.
+- The first right-side doorway capsule movement check passed after moving the corridor desk away from the opening.
 - Audio resource import, loop configuration, and bus checks passed headlessly; listening quality still needs a graphical session.
 - Original one-shot sounds now cover footsteps, item pickup, restoring power, unlocking locker 14, and completing the exit interaction. Their balance and sound quality have not been evaluated in a graphical session.
 - No graphical gameplay check has been performed.
